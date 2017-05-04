@@ -1,0 +1,243 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>js+css3时钟动画</title>
+<!--<link href="css/zzsc.css" rel="stylesheet" type="text/css">-->
+</head>
+<style type="text/css">
+*{padding:0;margin:0;}
+.lagerclockdiv{
+	width:220px;
+	height:220px;
+	border-radius:25px;
+	background-color:#000;
+	left:30%;
+	top:30%;
+	position:absolute;
+}
+.clock{
+	width:200px;
+	height:200px;
+	border-radius:50%;
+	background-color:#fff;
+	left:50%;
+	top:50%;
+	position:absolute;
+	transform:translate(-50%,-50%);
+	-webkit-transform:translate(-50%,-50%);
+	-ms-transform:translate(-50%,-50%);
+}
+.clock ol{
+	list-style:none;
+	position:relative;
+}
+.clock ol li {
+  counter-increment: labelCounter;
+  position: absolute;
+  font-size: 1.25em;
+  color:#000;
+}
+.clock ol li:before {
+  font-family: 'Helvetica';
+  content: counter(labelCounter) "";
+}
+.clock ol li:nth-child(1){
+   right:55px;
+   top:20px;
+}
+.clock ol li:nth-child(2){
+   right:25px;
+   top:50px;
+}
+.clock ol li:nth-child(3){
+	right:12px;
+	top:85px;
+}
+
+.clock ol li:nth-child(4){
+	right:25px;
+	top:125px;
+}
+.clock ol li:nth-child(5){
+	right:55px;
+	top:150px;
+}
+
+.clock ol li:nth-child(6){
+	right:90px;
+	top:160px;
+}
+
+.clock ol li:nth-child(7){
+	right:125px;
+	top:150px;
+}
+
+.clock ol li:nth-child(8){
+	right:155px;
+	top:125px;
+}
+.clock ol li:nth-child(9){
+	right:165px;
+	top:85px;
+}
+.clock ol li:nth-child(10){
+	right:155px;
+	top:50px;
+}
+.clock ol li:nth-child(11){
+	right:120px;
+	top:20px;
+}
+.clock ol li:nth-child(12){
+	right:85px;
+	top:10px;
+}
+
+.hour{
+	position:absolute;
+	width:14px;
+	height:14px;
+	background-color:#303030;
+	border-radius:50%;
+	left:50%;
+	top:50%;
+	margin-top:-7px;
+	margin-left:-7px;
+}
+
+.hour:before,.hour:after{
+	content:"";
+	position:absolute;
+	display:block;
+}
+.hour:before{
+	width:8px;
+	height:65px;
+	border-radius: 4px;
+    background: #303030;
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    -webkit-transform: translate(-50%,0);
+    -ms-transform: translate(-50%,0);
+    transform: translate(-50%,0);
+}
+
+.minutes{
+	width:0px;
+	height:0px;
+	background-color:#303030;
+	border-radius:50%;
+	left:50%;
+	top:50%;
+	position:absolute;
+}
+
+.minutes:before,.minutes:after{
+	content:"";
+	position:absolute;
+	display:block;
+}
+.minutes:before{
+	width:6px;
+	height:80px;
+	position:absolute;
+	border-radius:4px;
+	background-color:#303030;
+	left:50%;
+	transform:translate(-50%,0);
+	bottom:2px;
+}
+.second{
+	position:absolute;
+	width:0px;
+	height:0px;
+	background-color:#303030;
+	border-radius:50%;
+	left:50%;
+	top:50%;
+}
+
+.second:before,.second:after{
+	content:"";
+	position:absolute;
+	display:block;
+}
+.second:before{
+	width:4px;
+	height:120px;
+	position:absolute;
+	border-radius:4px;
+	background-color:#e13e1b;
+	left:50%;
+	transform:translate(-50%,0);
+	bottom:-12px;
+}
+
+</style>
+<body>
+	<div class="lagerclockdiv">
+		<div class="clock">
+			<ol>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+				<li></li>
+			</ol>
+		</div>
+		
+		<div class="hour" id="hour"></div>
+		<div class="minutes" id="min"></div>
+		<div class="second" id="sec"></div>
+	</div>
+	<script type="text/javascript">
+		window.requestAnimFrame = (function(){
+	  return  window.requestAnimationFrame       ||
+			  window.webkitRequestAnimationFrame ||
+			  window.mozRequestAnimationFrame    ||
+			  function( callback ){
+				  window.setTimeout(callback, 1000 / 60);
+			  };
+	})();
+
+//initialize the clock in a self-invoking function
+(function clock(){ 
+    var hour = document.getElementById("hour"),
+        min = document.getElementById("min"),
+        sec = document.getElementById("sec");
+    //set up a loop
+    (function loop(){
+        requestAnimFrame(loop);
+        draw();
+		
+    })();
+    //position the hands
+    function draw(){
+
+        var now = new Date(),//now
+            then = new Date(now.getFullYear(),now.getMonth(),now.getDate(),0,0,0),//midnight
+            diffInMil = (now.getTime() - then.getTime()),// difference in milliseconds
+            h = (diffInMil/(1000*60*60)),//hours
+            m = (h*60),//minutes
+            s = (m*60);//seconds
+        //rotate the hands accordingly
+        sec.style.webkitTransform = "rotate(" + (s * 6) + "deg)";
+        hour.style.webkitTransform = "rotate(" + (h * 30 + (h / 2)) + "deg)";
+        min.style.webkitTransform = "rotate(" + (m * 6) + "deg)";
+    } 
+
+})();
+	</script>
+</body>
+</html>

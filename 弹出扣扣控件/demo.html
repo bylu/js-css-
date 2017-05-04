@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>右下角悬浮可最大化、最小化和关闭功能的提示框</title>
+</head>
+
+<body style="height:2000px;">
+<style>
+.popBtn{width:18px; height:18px; cursor:pointer; float:right; margin-left:1px; margin-top:12px; display:inline; background:url(buttons.png) no-repeat;}
+.popClose{margin-right:10px; width:15px; background-position:-39px 0}
+.popClose:hover{background-position:-39px -20px}
+.popShow{background-position:0px 0}
+.popShow:hover{background-position:0px -20px}
+.popHide{background-position:-19px 0}
+.popHide:hover{background-position:-19px -20px}
+</style>
+<script type="text/javascript">
+function showDiv(innerCall){
+    if(document.getElementById('PcPoPmarket')==null)return;
+		document.getElementById('PcPoPmarket').style.width = 350+'px';
+		document.getElementById('PcPoPmarket').style.height = 238+'px';
+		document.getElementById('showvod').style.display = 'none';
+		document.getElementById('hidevod').style.display = 'block';	
+		var lmt = document.getElementById('popFrame').contentWindow.document.getElementById('lmt');
+		if(lmt!=null){
+			lmt.style.backgroundImage = 'url(bg_open.png)';
+		}
+}
+
+function hideDiv(innerCall){
+    if(document.getElementById('PcPoPmarket')==null)return;
+	
+	document.getElementById('PcPoPmarket').style.width = 226 + 'px';
+	document.getElementById('PcPoPmarket').style.height = 37 + 'px';
+	document.getElementById('hidevod').style.display = 'none';
+	document.getElementById('showvod').style.display = 'block';
+	var lmt = document.getElementById('popFrame').contentWindow.document.getElementById('lmt');
+	if(lmt!=null){
+		lmt.style.backgroundImage = 'url(bg_min.png)';
+	}
+}
+
+function closeDiv(innerCall){
+    if(document.getElementById('PcPoPmarket')==null)return;
+	document.getElementById('PcPoPmarket').style.display = 'none';
+}
+</script>
+<span id="tmpAreaLmtDiv">
+<div style="z-index: 1000; right: 0px; bottom: 0px; overflow-x: hidden; overflow-y: hidden; position: fixed; width: 350px; height: 238px; " id="PcPoPmarket">
+<div id="popTop" style="z-index:1000; POSITION: absolute; right:0; height:30px; overflow:hidden;">
+<span class="popBtn popClose" onclick="closeDiv()"></span>
+<span class="popBtn popShow" onclick="showDiv()" id="showvod" style="display: none; "></span>
+<span class="popBtn popHide" onclick="hideDiv()" id="hidevod" style="display: block; ">
+</span></div>
+<iframe id="popFrame" scrolling="no" frameborder="0" width="350" allowtransparency="true" height="238" src="poppage.html" target="_blank">-</iframe>
+</div></span>
+<center>
+  <span style="font-size:15px; font-weight:bold; text-align:center; line-height:25px; color:#000; width:100%">右下角悬浮可最大化、最小化和关闭功能的提示框<br />
+  <a href="http://www.jq-school.com" target="_blank" style="color:#000">JquerySchool</a>网站出品（<a href="http://www.jq-school.com" style="color:#000" target="_blank">http://www.jq-school.com</a>） <br />
+   <a href="http://api.jq-school.com/" target="_blank" style="color:#000">在线API帮助文档</a> <br />
+  <a target="_blank" href="http://wp.qq.com/wpa/qunwpa?idkey=6fcb83942dc3630777ae7745bd5093a1a5917f915f4e95cfc498633379ebfbb4">官方网站学习交流QQ群<img border="0" src="http://pub.idqqimg.com/wpa/images/group.png" style="width:90px; height:22px;" alt="Jquery学堂QQ⑤群" width="90" height="22" title="Jquery学堂QQ⑤群"></a></span>
+</center>
+</body>
+</html>

@@ -1,0 +1,147 @@
+.main_6 {
+     width:510px; margin:0px auto;background:url(/templets/shopImg/VIPtop.png) no-repeat;background-color:#fff6f6;min-height:415px;margin-top:20px;
+}
+.vipTop {
+    width:508px;
+     height:50px;
+}
+    .vipTop a {
+    float:right;cursor:pointer;display:inline;
+    }
+           .mid6center{
+            width:472px;
+            margin:0px auto;
+            background:url(/templets/shopImg/userinfo_frame.png) no-repeat;
+            height:68px;
+            }
+            .showface {
+              float:left;
+              width:50px;
+              height:50px;
+              margin:8px 8px ; 
+              display:inline;
+                      
+            }
+            .userInfoVIP {
+            width:405px;
+            _width:400px;
+            float:left;
+            display:inline;
+            }
+                .userInfoVIP p {
+                margin-left:10px;
+                color:#503b3f;
+                font-size:14px;
+                font-family:Microsoft YaHei;
+                }
+            .vipDJ {
+            width:100%;
+            height:20px;
+           margin-top:18px;
+           margin-left:20px;
+           _margin-left:5px;
+            }
+                .vipDJ p {
+                float:left;
+                display:inline;
+                }
+            .mid6AllCon {
+            width:94%;
+            margin:0px auto;
+            }
+           
+                .mid6AllCon ul {
+                    float:left;
+			     margin-top:9px;
+                }
+                    .mid6AllCon ul li {
+                        float:left;
+                    width:60px;
+                    margin-left:8px;
+                    background:url(/templets/shopImg/Arrows_Gray.png) right no-repeat;
+                    }
+
+            .showAllDiv {
+            width:100%;
+            margin:0px auto;
+	            float:left;
+            }
+            .main6footer {
+            width:100%;
+            margin:0px auto;
+            text-align:center;
+            margin-top:8px;
+            margin-bottom:20px;
+            }
+                .main6footer input {
+                background:url(/templets/shopImg/normal.png) no-repeat;
+                width:153px;
+                height:37px;
+                border:0px;
+                cursor:pointer;
+                margin-top:8px;
+		margin-top:3px;
+                }
+        #state1, #state2, #state3, #state4, #state5, #state6, #state7 {
+             width:472px;
+            margin:0px auto;
+            height:184px;
+}
+            #state1 {
+           background:url(/templets/shopImg/framev1.png) no-repeat;
+            }
+             #state2 {
+           background:url(/templets/shopImg/framev2.png) no-repeat;
+            }
+              #state3 {
+           background:url(/templets/shopImg/framev3.png) no-repeat;
+            }
+                #state4 {
+           background:url(/templets/shopImg/framev4.png) no-repeat;
+            }
+              #state5 {
+           background:url(/templets/shopImg/framev5.png) no-repeat;
+            }
+                #state6 {
+           background:url(/templets/shopImg/framev6.png) no-repeat;
+            }
+                   #state7 {
+           background:url(/templets/shopImg/framev7.png) no-repeat;
+            }
+            .frame1Con {
+            width:94%;
+            margin:0px auto;
+            padding-top:25px;
+            }
+                .frame1Con p {
+                text-align:center;
+                font-size:20px;
+                font-weight:bolder;
+                color:#404040;
+                font-family:Microsoft YaHei;
+                }
+                .frame1Con p span {
+                   color:#f52661;
+                }
+				
+            .frame1ConTq {
+           float:left;
+		   width:100%;
+            }
+                .frame1ConTq span {
+                    width:100%;
+                    float:left;
+                    line-height:25px;
+                    font-size:12px;
+                    font-family:SimSun;
+                    display:inline;
+					height:25px;
+                }
+                 .frame1ConTq span label {
+                     color:#f52661;
+                 }
+            .showinfosIfram {
+			float:left;
+			width:100%;
+			display:inline;
+            }

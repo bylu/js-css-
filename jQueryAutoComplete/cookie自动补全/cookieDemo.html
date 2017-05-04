@@ -1,0 +1,93 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>cookie自动补全</title>
+    <script type="text/javascript" src="../lib/jquery-1.7.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../src/jquery.autocomplete.css"></link>
+    <script type="text/javascript" src="../src/jquery.autocomplete.min.js"></script>
+    <script src="../test/test.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0px;
+            background: #f4f4f4;
+            font-family: Helvetica Neue, Helvetica, Arial;
+        }
+    </style>
+    <script type="text/javascript">
+		//保存cookie
+		function setCookie(name,value) {//两个参数，一个是cookie的名字，一个是值
+			var beforeVal = getcookie(name);
+			if(beforeVal.indexOf(value) != -1) {
+				if(beforeVal.indexOf(value + ",") != -1) {
+					var temp = value + ",";
+					beforeVal = beforeVal.replace(temp,"");
+				} else {
+					var temp = "," + value;
+					beforeVal = beforeVal.replace(value,"");
+				}
+			}
+			value = beforeVal + "," + value;
+		    var Days = 30; //此 cookie 将被保存 30 天
+		    var exp = new Date();    
+		    exp.setTime(exp.getTime() + Days*24*60*60*1000);
+		    document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString();
+		}
+		//获取cookie
+	    function getcookie(name) {   
+	       var arr = document.cookie.match(new RegExp("(^| )"+name+"=([^;]*)(;|$)"));   
+	       if(arr != null)	 {   
+	           return unescape(arr[2]);   
+	       } else {   
+	           return "";   
+	       }   
+	    }  
+	    //获取cookie转成数组 最近的十项
+	    function getcookieItem(name) {
+	    	var str = getcookie(name);
+	    	var arrayVal = new Array();
+	    	var dataList = new Array();
+	    	arrayVal = str.split(",");
+	    	var data = ""; 
+	    	var index = 1;
+	    	if(arrayVal.length != 0) {
+	    		for(var i=arrayVal.length-1; i>=0; i--) {
+	    			if(index > 10) {
+		    			break;
+		    		}
+		    		dataList.push(arrayVal[i]);
+		    		index++;
+	    		}
+	    	}
+	    	return dataList;
+	    }
+	   	//绑定姓名自动补全
+	    $(function(){
+	    	$("#userName").bind("focus",function() {
+	    		var data = getcookieItem("userName");
+	    		 $("#userName").AutoComplete({
+	                'data': data,
+	                'itemHeight': 20,
+	                'width': 200
+	          		 }).AutoComplete('show');
+	    		});
+
+			$("#button").bind("click",function(){
+				setCookie("userName",$("#userName").val());
+				location.href="cookieDemo.html";
+			});
+	    });
+		
+    </script>
+</head>
+<body>
+   
+    <div style="width:1000px;margin:auto;">
+        <div style="display:table-cell;">
+            <div style="height:503px;width:330px;">
+                姓名：<input type="text" id="userName" value=""></input><span style="font-weight:bold;font-size:13px;">cookie自动补全</span>
+				<input type="button" id="button" value="提交"/>
+            </div>
+       
+    </div>
+</body>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>异步分页-by 大前端江湖xl</title>
+    <link href="page.css" rel="stylesheet" type="text/css">
+    <style>
+	/*清浮动*/
+	body{}
+	#main{width:1000px;margin:0 auto;}
+	#xl{background-color:#ccc;padding:10px;}
+	
+	#xl2{background-color:#f3f3f3;padding:10px;margin-top:20px;}
+	
+	
+	table { border-collapse:collapse;border-spacing:0;border: 1px solid #D9D9D9; color: #222222; font-size: 14px; margin-top: 10px; width: 100%; }
+	table td { border: none; background: #FFFFFF; border-color: #D9D9D9; border-style: none solid solid; border-width: medium 1px 1px; padding: 6px; word-break: break-all; word-wrap: break-word; text-align: center; }
+	table .infoTd { background: #F0F0F0; font-weight: bold; padding: 8px; }
+	table tr.hover td, table tr:hover td { background: #F0F0F0; }
+	
+	</style>
+</head>
+<body>
+	<div id="main">
+    	<h1>jQuery插件之 ajaxPage() 异步分页</h1>
+        <div id="xl"></div>
+        <div id="page" class="page"></div>
+        
+        
+      <div id="xl2"></div>
+        <div id="page2" class="page"></div>
+    
+    
+    
+    <div id="loading" style="display:none;box-shadow:0 0 10px #333;color:#fff;background-color:#060;width:100px;height:26px;line-height:26px;text-align:center;position:fixed;top:50%;left:50%;z-index:1999999;text-shadow:0 0 10px #09f;margin-left:-50px;margin-top:-23px;">请求中</div>
+    
+    <h1>$(obj).ajaxPage(setting);是扩展jQuery的一个方法,名为 异步分页, 可设置几个参数再配合后端的处理很快的达到分页效果, 且自定义输出;</h1>
+    <p>
+   	  <h3>用法:</h3>
+   	  <p>1, 引用ajaxPage css文件; (该文件为页码显示样式, 可合并到你的样式里);</p>
+   	  <p>2, 引用 jQuery类库, 建议使用jQuery&nbsp;1.8.3;</p>
+   	  <p>3, 引用ajaxPage.js文件;</p>
+   	  <p>4, $(obj).ajaxPage(setting); //obj为分页内容输出的容器, 为jQuery的选择器; 建议使用id;  setting为配置的参数;</p>
+   	  <table width="100%" border="0" cellspacing="0" cellpadding="0">
+      <tr>
+        <td colspan="3" class="infoTd">seting</td>
+        </tr>
+      <tr>
+        <td class="infoTd" width="15%">参数</td>
+        <td class="infoTd" width="18%">类型</td>
+        <td class="infoTd" width="67%">描述</td>
+      </tr>
+      <tr>
+        <td>url</td>
+        <td>string</td>
+        <td style="text-align:left;"><strong>必选参数</strong>, 可在里面使用变量{page}表示当前页; <br>
+        如:&nbsp; /index.asp?page={page}&amp;type=xl , /index_{page}.html, /index.php?page={page}&amp;pageSize={paeSize}等</td>
+      </tr>
+      <tr>
+        <td>pageId</td>
+        <td>jQuery对象</td>
+        <td style="text-align:left;"><strong>必选参数</strong>,为分页输出的容器;<br>
+          如: pageId:$(&quot;#page&quot;) ;</td>
+      </tr>
+      <tr>
+        <td>content</td>
+        <td>string || function</td>
+        <td style="text-align:left;"><strong>必选参数</strong>;为内容输出格式,里面的数据跟据后端返回所定;<br>
+          string类型: content: &quot;&lt;ul&gt;[data]标题:{title}[/data]&lt;/ul&gt;&quot; ;&nbsp; // data为后端返回名称,详情见下面后端处理;<br>
+          function类型:&nbsp; content: function () {return &quot;&lt;ul&gt;[data]标题:{title}[/data]&lt;/ul&gt;&quot;}, 其中可用this来调用配置的参数;<br>
+          如: content : function () {return this.page*1&lt;12?'&lt;ul&gt;[data]&lt;li&gt;标题:{title},时间:{time},点击:{hit}&lt;/li&gt;[/data]&lt;/ul&gt;':&quot;大于&quot;; }</td>
+      </tr>
+      <tr>
+        <td>pageSize</td>
+        <td>number</td>
+        <td style="text-align:left;">每页多少条数据,如果设置的话可在url中用{pageSize}替换;默认为10;</td>
+      </tr>
+      <tr>
+        <td>page</td>
+        <td>number</td>
+        <td style="text-align:left;">当前加载页,默认为1;</td>
+      </tr>
+      <tr>
+        <td>beforeSend</td>
+        <td>function</td>
+        <td style="text-align:left;">请求数据前调用;&nbsp;如做加载提示等; 如: beforeSend: function () {$(&quot;#loading&quot;).fadeIn()};</td>
+      </tr>
+      <tr>
+        <td>complete</td>
+        <td>function</td>
+        <td style="text-align:left;">请求完毕后调用; 可把加载提示关闭等;</td>
+      </tr>
+      <tr>
+        <td>noData</td>
+        <td>string</td>
+        <td style="text-align:left;">没有数据时显示在内容输出容器显示的;默认为:没有找到;</td>
+      </tr>
+      <tr>
+        <td>run</td>
+        <td>boolean </td>
+        <td style="text-align:left;">是否开始载分页,默认为否;<br>
+          如:&nbsp; run:true, 则程序会马上执行分页;</td>
+      </tr>
+      <tr>
+        <td colspan="3">&nbsp;</td>
+        </tr>
+      <tr>
+        <td colspan="3" class="infoTd">对外暴露的方法</td>
+        </tr>
+      <tr>
+        <td>run()</td>
+        <td colspan="2" style="text-align:left;">运行分页程序;可做成按需加载等;<br>
+          如:<br>
+          var a = $(&quot;#xl&quot;).ajaxPage(setting);//&nbsp; setting里会配置必须参数;<br>
+          setTimeout(function () {&nbsp;<br>
+          &nbsp;  a.run();<br>
+          },2000);<br>
+          注意: 默认运行run()后加载的 setting.page页; setting.run 跟 run()一样;</td>
+        </tr>
+      <tr>
+        <td>get(i);</td>
+        <td colspan="2" style="text-align:left;">加载等几页;<br>
+          有 &quot;first&quot; 第一页, &quot;last&quot;最后一页, &quot;next&quot;下一页, &quot;pre&quot;上一页可选, 否则可给数字如:&nbsp;<br>
+          :<br>
+var a = $(&quot;#xl&quot;).ajaxPage(setting);//&nbsp; setting里会配置必须参数;<br>
+setTimeout(function () {<br>
+&nbsp; a.get(&quot;last&quot;); //跳到最后一页;<br>
+},2000);<br>
+<br>
+为了优化在没有请求当前的请求再请求会直接忽略;如:<br>
+a.get(1).get(2).get(3);&nbsp; //在没有请求1成功后2,3都直接忽略;<br>
+注意:使用get()前,必须保证你已经run过;<br>
+当前页加载当前页无效;<br></td>
+      </tr>
+      <tr>
+        <td colspan="3">&nbsp;</td>
+        </tr>
+      <tr>
+        <td colspan="3" class="infoTd">后端处理</td>
+        </tr>
+      <tr>
+        <td>接收参数</td>
+        <td colspan="2" style="text-align:left;">前端会以setting.url中的格式给后端请求,(目前暂只支持get)如: i.php?page=1&amp;pageSize=10,后端接收后请进行程序上的处理返回前端;(pageSize也可不传,前端和后端统一写死也可)<br>
+          注意:请不要相信前端的传参,为了安全请过虑或者转义;</td>
+      </tr>
+      <tr>
+        <td>返回值</td>
+        <td colspan="2" style="text-align:left;">{&quot;code&quot;:0} 没有数据时返回<br>
+          {&quot;code&quot;:1,&quot;pageCount&quot;:16,&quot;recordCount&quot;:156,&quot;data&quot;:[{&quot;title&quot;:&quot;谢亮&quot;,&quot;time&quot;:20120505},{&quot;title&quot;:&quot;你&quot;,&quot;time&quot;:55555}]}//<br>
+          其中code:1 为响应码, paegCount: 为一共多少页; recordCount: 为一共多少条数据;<br>
+          data是一个循环数组, 该数据直接会通过 setting.content中过虑后显示在内容容器, data可自己定义,该名直接跟 content:&quot;[data][/data]&quot;对应即可,data里的循环为{} 对象, 里面的键名直接对应content中的[data]里的 {}变量即可;<br>
+          这里感谢Dmimi:&nbsp; <a href="http://dmimi.sentsin.com/" target="_blank">http://dmimi.sentsin.com/</a> </td>
+      </tr>
+      <tr>
+        <td colspan="3">&nbsp;</td>
+        </tr>
+      <tr>
+        <td colspan="3" class="infoTd">例子</td>
+        </tr>
+      <tr>
+        <td>最小化</td>
+        <td colspan="2" style="text-align:left;">$(&quot;#xl&quot;).ajaxPage({<br>
+          &nbsp;&nbsp;&nbsp;
+url:&quot;page.php?get=xl&amp;page={page}&quot;, //后端也让pageSize = 10 是个固定值<br>
+&nbsp;&nbsp;&nbsp;
+pageId:$(&quot;#page&quot;),<br>
+&nbsp;&nbsp;&nbsp;
+run:true,<br>
+&nbsp;&nbsp;
+content:'&lt;ul&gt;[data]&lt;li&gt;标题:{title},时间:{time},点击:{hit}&lt;/li&gt;[/data]&lt;/ul&gt;'
+<br>
+});</td>
+      </tr>
+      <tr>
+        <td>有加载提示</td>
+        <td colspan="2" style="text-align:left;">$(&quot;#xl&quot;).ajaxPage({<br>
+url:&quot;page.php?get=xl&amp;page={page}&quot;,<br>
+pageId:$(&quot;#page&quot;),<br>
+run:true,<br>
+content: function () {<br>
+return '&lt;ul&gt;[data]&lt;li&gt;标题:{title},时间:{time},点击:{hit}&lt;/li&gt;[/data]&lt;/ul&gt;'; <br>
+},<br>
+beforeSend:function () {<br>
+$(&quot;#loading&quot;).fadeIn(); <br>
+},<br>
+complete:function () {<br>
+$(&quot;#loading&quot;).stop().fadeOut(); <br>
+}<br>
+});</td>
+      </tr>
+      <tr>
+        <td>前10页是一种HTML格式,后面是一种HTML格式</td>
+        <td colspan="2" style="text-align:left;">$(&quot;#xl&quot;).ajaxPage({<br>
+url:&quot;page.php?get=xl&amp;page={page}&amp;pageSize={pageSize}&quot;,<br>
+pageId:$(&quot;#page&quot;),<br>
+//run:true,<br>
+content: function () {<br>
+return this.page*1&gt;=10?'&lt;ul&gt;[data]&lt;li&gt;标题:{title},时间:{time},点击:{hit}&lt;/li&gt;[/data]&lt;/ul&gt;':&quot;我是后10页[data]{title}[/data]&quot;; <br>
+}<br>
+});</td>
+      </tr>
+      <tr>
+        <td>按需要加载</td>
+        <td colspan="2" style="text-align:left;"><p>var a = $(&quot;#xl&quot;).ajaxPage({<br>
+          url:&quot;page.php?get=xl&amp;page={page}&quot;,<br>
+          pageId:$(&quot;#page&quot;),<br>
+          content: '&lt;ul&gt;[data]&lt;li&gt;标题:{title},时间:{time},点击:{hit}&lt;/li&gt;[/data]&lt;/ul&gt;'<br>
+        });</p>
+        <p>$(window).scroll(function () {</p>
+        <p>///code 请做缓存<br>
+          a.run();
+        </p>
+        <p>});</p></td>
+      </tr>
+      <tr>
+        <td>4000ms后加载最后一页</td>
+        <td colspan="2" style="text-align:left;"><p>var a = $(&quot;#xl&quot;).ajaxPage({<br>
+          url:&quot;page.php?get=xl&amp;page={page}&quot;,<br>
+          pageId:$(&quot;#page&quot;),<br>
+          run:true,
+          <br>
+          content: '&lt;ul&gt;[data]&lt;li&gt;标题:{title},时间:{time},点击:{hit}&lt;/li&gt;[/data]&lt;/ul&gt;'<br>
+        });<br>
+        setTimeout(function () {<br>
+        a.get(&quot;last&quot;);//<br>
+        },4000); </p></td>
+      </tr>
+      <tr>
+        <td colspan="3">&nbsp;</td>
+        </tr>
+      <tr>
+        <td colspan="3" class="infoTd">优缺点</td>
+        </tr>
+      <tr>
+        <td colspan="3" style="text-align:left"><p>优点, 代码轻量,易扩展,一个页面可多次使用,配合一些设置后可做常见的评论,列表等;</p>
+        <p>缺点, 目前只支持get, 不支持jsonp,post等;</p>
+        <p>如您发现bug请反馈给463004799-&gt;谢亮;</p></td>
+        </tr>
+      </table>
+      <p style="text-align:center">by xl</p>
+    </div>
+<script src='jquery.js'></script>
+    <script src='page.min.js'></script>
+    <script>
+	$(function () {
+		var a = $("#xl").ajaxPage({
+			url:"http://www.xuexb.com/demo/page/page.php?get=xl&page={page}&pageSize={pageSize}",
+			pageId:$("#page"),
+			//run:true,
+			content: function () {
+				return this.page*1<12?'<ul>[data]<li>标题:{title},时间:{time},点击:{hit}</li>[/data]</ul>':"大于12";	
+			},
+			beforeSend:function () {
+				$("#loading").fadeIn();	
+			},
+			complete:function () {
+				$("#loading").stop().fadeOut();	
+			}
+		});
+		setTimeout(function () {
+			a.run()
+				setTimeout(function () {
+					a.get("last")//.get("first");
+					a.run().get(2)//.get("first");
+					a.run().get(6)//.get("first");
+				}, 2000);
+			},2000);
+		
+		
+		$("#xl2").ajaxPage({
+			url:"page.php?get=xl&page={page}",
+			pageId:$("#page2"),
+			run:true,
+			content: function () {
+				return '<ul>[data]<li>标题:{title},时间:{time},点击:{hit}</li>[/data]</ul>';	
+			}
+		});
+	});
+	</script>
+</body>
+</html>

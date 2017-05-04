@@ -1,0 +1,57 @@
+1、jquery.roundabout.js
+超棒的左右3D旋转式幻灯片jQuery插件
+2、jquery validate.js
+验证表单
+3、jquery ui插件
+对话框 日期
+4、lhgdialog.js
+对话框
+5、瀑布流插件jquery.masonry.min.js
+6、jquery.qrcode.js生成二维码
+7、Isotope.js 动态布局
+8、jquery.touchSwipe.js插件，适合手机客户端手势上下滑屏的jQuery插件
+9、jquery.pagination.js 分页插件
+10、checkbox.js 复选框
+11、jqthumb.js缩略图插件-让缩略图正常显示而不变形
+12、jquery.SuperSlide.js只需要调用一个插件就能实现网页大部分特效
+焦点图 tab标签切换 图片滚动 无缝滚动等
+13、jquery.cityselect.js基于jQuery+JSON的省市或自定义联动效果
+14、jquery.weather.build.js制作出属于自己的天气
+15、jquery.floatDiv.js让你的DIV固定在页面上
+16、kxbdSuperMarquee.js滚动的神器-推荐
+17、jquery.myscroll.js列表上下无缝滚动插件
+18、jquery.jFloat.js对联插件
+19、jquery.selectCity.js输入框弹出层
+20、jquery.placeholder.min.js让你的IE浏览器支持placeholder
+21、chosen.jquery.js美化下拉菜单插件
+22、visualize.jQuery.js将Tables标签转换成图表的jQuery插
+23、jquery.banner.js用JQuery来制作Flash或者GIF效果的广告过渡
+24、waterfall.js瀑布流布局单排图片自动滚动
+25、jQSelect.js让你的下拉菜单变得漂亮起来
+26、jquery.color.js彩色动画插件让菜单不再孤单
+27、jquery.qrcode.js生成二维条形码(经修改支持中文)
+28、jquery.flexslider.js带左右箭头且带按钮可滚动的图片插件
+29、turn.js实现翻书效果
+<script type="text/javascript">
+$(‘#magazine’).turn({width: 612, height: 400, acceleration: true});
+</script>不能放在head前 只能放在需要翻书效果的div后
+30、jquery.autocomplete.js自动提示（加载JS数据）
+31、zoomer.js鼠标经过图像放大的特效
+32、jquery.pngFix.js对IE6的PNG图片处理插件
+33、jquery.corner.js圆角插件
+34、jcarousellite.js 基于Jquery的无缝“垂直滚动”图片插件
+36、jquery.accordion.js 纵向手风琴效果插件
+37、jquery.chained.js多级联动插件
+38、execute.js鼠标移动到图片上，图片就会弹起的插件(仿苹果界面)
+39、zoomi.js 图片绽放特效插件(连续几张图片的使用方法)
+40、supersized.js 在浏览器中全屏显示图片插件
+41、spacegallery.js从远而近的缩放效果插件
+42、piroBox.js图片橱窗效果插件
+43、jquery.overscroll.js类似iPhone的卷页菜单插件
+44、jquery.maxlength.js检查输入文字数目插件
+45、jquery.jqzoom.js放大镜效果插件
+46、airport.js 航班显示板插件（航班显示板插件，与飞机场的航班显示板一样，一个字一个字跳动的显示信息）
+47、stylesheetToggle.js切换网页外观（该插件通过单击设置的链接或按钮自由切换网页的CSS来改变网页的外观）
+48、jTicker.js以逐字滚动新闻形式显示内容插件（jTicker是以滚动新闻的形式逐字显示文本内容，用打字机的效果一个个打印显示出来）
+49、vTip.js提示框插件（该插件用于需要显示链接对象网页及图片说明等信息的情况）
+50、scrolltopcontrol.js返回页顶的导航链接插件,超方便！

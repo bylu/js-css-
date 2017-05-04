@@ -1,0 +1,279 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>6513游戏中心</title>
+<script type="text/javascript" src="lib/js/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="js/jquery.progressbar.min.js"></script>
+<link href="css/common.css" rel="Stylesheet" />
+<link href="css/vip.css" rel="Stylesheet" />
+<style type="text/css">
+	ol,ul{
+	list-style:none
+}
+img{ behavior: url(iePng/iepngfix.htc); }
+</style>
+
+     <!--  VIP功能模块  begin  -->
+  <script type="text/javascript">
+   /*   $(document).ready(function () {
+	  $("#progressOne").progressBar();
+          $(document).bind("contextmenu", function (e) {
+              return false;
+          });
+      });*/
+      //该方法位扩展方法,获取传递过来的值
+      (function ($) {
+          $.getUrlParam = function (name) {
+              var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+              var r = window.location.search.substr(1).match(reg);
+              if (r != null) return unescape(r[2]); return null;
+          }
+      })(jQuery);
+      //开始方法
+      //升级vip等级所对应的充值需求额
+      var vip_money = Array();
+      vip_money[0] = 1;
+      vip_money[1] = 100;
+      vip_money[2] = 500;
+      vip_money[3] = 1000;
+      vip_money[4] = 2000;
+      vip_money[5] = 5000;
+      vip_money[6] = 10000;
+      $(document).ready(function () {
+		  $("#progressOne_percentText").css("margin-left","5px");
+              uid = $.getUrlParam('UID');  //对上面扩展方法的调用并获取uid
+              if (uid != null && uid != "") {
+                  $.post(
+                      "ashx/get_vip_info.ashx",    //vip请求处理地址
+                      { UID: uid },                //传递参数:UID
+                      function (data) {
+                          if (data != -1 && data != -2 && data != -3) {
+                              var userfulVal = data.split('*');  //获取后台处理后的相应数据
+                              var userFaceId = userfulVal[0];    //用户的头像
+                              var userName = userfulVal[1];     //用户的名字
+                              var userLevel = userfulVal[2];    //用户的VIP等级
+                              var userPayTotal = parseInt(userfulVal[3]);  //用户的充值总额		
+                              if (userPayTotal - 1 < 0) {
+                                  userPayTotal = 0;
+                              } else {
+                                  userPayTotal -= 1;
+                              }
+                              if (userLevel > 0) {
+                                  $("#VIPNow").find("input").css("background", "url(/templets/shopImg/update_VIP_normal.jpg) no-repeat");
+                                  if (userLevel == 6 || userLevel == 7) {
+                                      $("#showmid6Info ul li").eq(6).addClass("selected").siblings().removeClass("selected");
+                                      $("div.showAllDiv  > div").eq(6).show().siblings().hide();
+									    var v=parseInt(vip_money[6]);
+										$("#progressOne").progressBar(userPayTotal/v*100);
+										$("#progressOne_percentText").html(userPayTotal + "" + vip_money[6]);
+                                       //$("#main_6").find(".vipinfo").html(userPayTotal + "" + vip_money[6]);  //VIP的图片显示
+                                  } else {
+                                      $("#showmid6Info ul li").eq(userLevel).addClass("selected").siblings().removeClass("selected");
+                                      $("div.showAllDiv  > div").eq(userLevel).show().siblings().hide();
+									   var v=parseInt(vip_money[userLevel]);
+									  $("#progressOne").progressBar(parseInt(userPayTotal/v*100));
+									  $("#progressOne_percentText").html(userPayTotal + "" + vip_money[userLevel]);
+                                     // $("#main_6").find(".vipinfo").html(userPayTotal + "" + vip_money[userLevel]);  //VIP的图片显示
+                                  }
+
+                              } else {
+                                  $("#showmid6Info ul li").eq(0).addClass("selected").siblings().removeClass("selected");
+                                  $("div.showAllDiv  > div").eq(0).show().siblings().hide();
+								  $("#progressOne").progressBar(userPayTotal/1*100);
+								  $("#progressOne_percentText").html(userPayTotal + "" +"1");
+                                  //$("#main_6").find(".vipinfo").html(userPayTotal + "" + "10");  //VIP的图片显示
+                              }
+                              //正式开始VIP数据绑定工作
+                              $("#main_6").find(".userFaceId").attr("src", "templets/shopImg/gamepic/" + userFaceId + ".png"); //绑定用户头像
+                              $("#main_6").find(".userName").html(userName);     //绑定用户名称
+                              //$("#main_6").find(".userLevel").html(userLevel);    //绑定用户等级
+                              $("#main_6").find(".userVipImg").attr("src", "templets/shopImg/showv" + userLevel + ".gif");   //绑定用户Vip等级图片
+                              $("#main_6").find(".vipStep").find("li").each(
+                                  function (i) {
+                                      if ((i + 1) < userLevel) {
+                                          $(this).css("background", "url(/templets/shopImg/Arrows.png) 100% 50% no-repeat");
+                                          $(this).find("img").attr("src", "templets/shopImg/start1/v" + (i + 1) + ".gif");
+                                      }
+                                      if ((i + 1) == userLevel) {
+                                          if (i + 1 < 7) {
+                                              $(this).css("background", "url(/templets/shopImg/Arrows.png) 100% 50% no-repeat");
+                                          }
+                                          $(this).find("img").attr("src", "templets/shopImg/start2/v" + (i + 1) + ".gif");
+                                      }
+                                  }
+                                  );
+                              for (var i = 2; i < 9; i++) {
+                                  if (userPayTotal >= vip_money[i - 2]) {
+                                      $("#state" + (i - 1)).find("p").eq(0).html("你已经享有以下特权");
+                                  }
+                                  $("#state" + i).find("p").eq(0).find("span").eq(0).html((vip_money[i - 1] - userPayTotal) + "元");
+                              }
+							  if(userLevel==1){
+							   $("#state1").find("p").eq(0).html("你已经享有以下特权");
+							  }
+                          } else {
+                              //alert("sorry,please Contact Customer Service !!");
+                          }
+                      }, 'text');
+              } else {
+                  //alert("对不起，你没有足够的奖券!!");
+              }
+          }
+          );
+    </script>
+</head>
+<body>
+    <div class="main_6" id="main_6" style="display:block; background-image:url('');margin-top:0px;padding-top:15px;">
+             <div  class="vipTop" style="display:none;">
+                 <a id="closeVIP"><img src="templets/shopImg/VIPclose.png" alt="" /></a>
+                 <a style="margin-top:-1px;" href="" target="_blank" id="tiaozhuan" ><img src="templets/shopImg/VIPhelp.png" alt=""  id="vipHelp"></a>
+             </div>
+             <div class="mid6center">
+                 
+                     <div class="showface"><img class="userFaceId" src="" alt="" style="width:50px;height:50px;" /></div>
+                      <div class="userInfoVIP">
+                         <p><label class="userName" style="color:#10C2CE; margin-right:7px;"></label>您目前的等级是：<label class="userLevel" style="color:#FF642E;"></label></p>
+                         <div class="vipDJ">
+                             <p><img class="userVipImg" src="templets/shopImg/showv3.gif" alt="" /></p>
+                             <p style="margin-left:25px; border:1px solid #eee;width:231px;height:19px;text-align:center;color:#B43415;" id="progressOne" class="vipinfo progressBar"></p>
+                             <p style="margin-left:22px;"><a href="changjianwenti/7.html" target="_blank" style="cursor:pointer;" id="shengjiHelp"><img src="templets/shopImg/help_Normal.png" style="border:0px;" alt="关于VIP" title="关于VIP"></a></p>
+                          <!--   <p style="margin-left:20px;cursor:pointer;" id="shengjiVip"><img src="templets/shopImg/vipNormal.png" /></p>-->
+                         </div>
+                     </div>
+                  
+             </div>
+             
+             <div class="mid6AllCon" id="showmid6Info">
+                 <div style="width:100%; float:left;display:inline; height:55px;">
+                     <ul  class="vipStep">
+                         <li class="selected" style="margin-left:11px;_margin-left:5px"><img src="templets/shopImg/v1.gif" /></li>
+                         <li><img src="templets/shopImg/v2.gif" /></li>
+                         <li><img src="templets/shopImg/v3.gif" /></li>
+                         <li><img src="templets/shopImg/v4.gif" /></li>
+                         <li><img src="templets/shopImg/v5.gif" /></li>
+                         <li><img src="templets/shopImg/v6.gif" /></li>
+                         <li style="background:none;"><img src="templets/shopImg/v7.gif" /></li>
+                     </ul>
+                   </div>
+                 <div class="showAllDiv">
+                     <div id="state1" >
+                         <div class="frame1Con">
+                             <p>(单次)充值<span>1元</span>，即可享有</p>
+                             <div class="frame1ConTq">
+                                 <span class="showinfosIfram" style="font-weight:bold;">[<img src="templets/shopImg/showv1.gif" />]特权：</span>
+                                 <span class="showinfosIfram">1>&nbsp;每分钟获得<lable style="color:red;">2点</lable>等级经验！<label  style="color:red;">（&nbsp;升级速度提高100%&nbsp;）</label></span>
+                                 <span class="showinfosIfram">2>&nbsp;[每日登陆领奖]<label style="color:red">(&nbsp;收益提高1.5倍&nbsp;)</label></span>
+								 <span class="showinfosIfram" style="width:100%;float:left;">&nbsp;&nbsp;&nbsp;</span>
+                                 <span class="showinfosIfram" style="margin-top:1px;width:80%;float:right;"><a href="changjianwenti/7.html" target="_blank" style="color:#428cc3; text-decoration:none;float:right;margin-right:13px;">了解更多特权>></a></span>
+                             </div>
+                         </div>
+                     </div>
+                     <div id="state2" style="display:none;">
+                         <div class="frame1Con">
+                             <p>再充值<span>70元</span>，即可享有</p>
+                             <div class="frame1ConTq">
+                                 <span class="showinfosIfram" style="font-weight:bold;">[<img src="templets/shopImg/showv2.gif" />]特权：</span>
+                                 <span class="showinfosIfram">1>&nbsp;每<lable style="color:#23a4da;">单笔</lable>充值满<label style="color:#23a4da;">100元</label>，返利<label style="color:red;">1%</label>（&nbsp;即：100元整倍数，199元按100元计算&nbsp;）</span>
+                                 <span class="showinfosIfram">2>&nbsp;每分钟获得<label style="color:red;">3点</label>等级经验<label style="color:red">（ 升级速度提高200% ）</label></span>
+                                 <span class="showinfosIfram">3>&nbsp;[每日登陆领奖]<label style="color:red">(&nbsp;收益提高2倍&nbsp;)</label></span>
+                                 <span class="showinfosIfram" style="margin-top:1px;width:80%;float:right;"><a href="changjianwenti/7.html" target="_blank" style="color:#428cc3; text-decoration:none;float:right;margin-right:13px;">了解更多特权>></a></span>
+                             </div>
+                         </div>
+                     </div>
+                     <div id="state3" style="display:none;">
+                         <div class="frame1Con">
+                             <p>再充值<span>70元</span>，即可享有</p>
+                             <div class="frame1ConTq">
+                                 <span class="showinfosIfram" style="font-weight:bold;">[<img src="templets/shopImg/showv3.gif" />]特权：</span>
+                                 <span class="showinfosIfram">1>&nbsp;每<label style="color:#23a4da;">单笔</label>充值满<label style="color:#23a4da;">100元</label>，返利<label style="color:red;">2%</label></span>
+                                 <span class="showinfosIfram">2>&nbsp;每分钟获得<label style="color:red;">4点</label>等级经验<label style="color:red;">（&nbsp;升级速度提高300%&nbsp;）</label></span>
+                                 <span class="showinfosIfram">3>&nbsp;[每日登陆领奖]<label style="color:red;">(&nbsp;收益提高3倍&nbsp;)</label></span>
+                                 <span class="showinfosIfram" style="margin-top:1px;width:80%;float:right;"><a href="changjianwenti/7.html" target="_blank" style="color:#428cc3; text-decoration:none;float:right;margin-right:13px;">了解更多特权>></a></span>
+                             </div>
+                         </div>
+                     </div>
+                     <div id="state4" style="display:none;">
+                         <div class="frame1Con">
+                             <p>再充值<span>70元</span>，即可享有</p>
+                             <div class="frame1ConTq">
+                                 <span class="showinfosIfram" style="font-weight:bold;">[<img src="templets/shopImg/showv4.gif" />]特权：</span>
+                                 <span class="showinfosIfram">1>&nbsp;每<label style="color:#23a4da;">单笔</label>充值满<label style="color:#23a4da;">100元</label>，返利<label style="color:red;">4%</label></span>
+                                 <span class="showinfosIfram">2>&nbsp;每分钟获得<label style="color:red;">5点</label>等级经验<label style="color:red;">（&nbsp;升级速度提高400%&nbsp;）</label></span>
+                                 <span class="showinfosIfram">3>&nbsp;[每日登陆领奖]<label style="color:red;">(&nbsp;收益提高4倍&nbsp;)</label></span>
+                                 <span class="showinfosIfram" style="margin-top:1px;width:80%;float:right;"><a href="changjianwenti/7.html" target="_blank" style="color:#428cc3; text-decoration:none;float:right;margin-right:13px;">了解更多特权>></a></span>
+                             </div>
+                         </div>
+                     </div>
+                     <div id="state5" style="display:none;display:none;_margin-left:3px;">
+                         <div class="frame1Con"  style="_margin-left:4px;">
+                             <p>再充值<span>70元</span>，即可享有</p>
+                             <div class="frame1ConTq">
+                                 <span class="showinfosIfram" style="font-weight:bold;">[<img src="templets/shopImg/showv5.gif" />]特权：</span>
+                                 <span class="showinfosIfram" style="width:450px">1>&nbsp;每<label style="color:#23a4da;">单笔</label>充值满<label style="color:#23a4da;">100元</label>，返利<label style="color:red;">8%</label></span>
+                                 <span class="showinfosIfram">2>&nbsp;每分钟获得<label style="color:red;">5点</label>等级经验<label style="color:red;">（&nbsp;升级速度提高400%&nbsp;）</label></span>
+								 <span class="showinfosIfram" style="width:450px">3>&nbsp;[每日登陆领奖]<label style="color:red;">(&nbsp;收益提高5倍&nbsp;)</label></span>
+                                 <span class="showinfosIfram" style="margin-top:1px;width:80%;float:right;"><a href="changjianwenti/7.html" target="_blank" style="color:#428cc3; text-decoration:none;float:right;margin-right:13px;">了解更多特权>></a></span>
+                             </div>
+                         </div>
+                     </div>
+                     <div id="state6" style="display:none;display:none;_margin-left:3px;">
+                         <div class="frame1Con"  style="_margin-left:4px;">
+                             <p>再充值<span>70元</span>，即可享有</p>
+                             <div class="frame1ConTq">
+                                 <span class="showinfosIfram" style="font-weight:bold;">[<img src="templets/shopImg/showv6.gif" />]特权：</span>
+                                 <span class="showinfosIfram" style="width:450px">1>&nbsp;每<label style="color:#23a4da;">单笔</label>充值满<label style="color:#23a4da;">100元</label>，返利<label style="color:red;">10%</label></span>
+                                 <span class="showinfosIfram">2>&nbsp;每分钟获得<label style="color:red;">5点</label>等级经验<label style="color:red;">（&nbsp;升级速度提高400%&nbsp;）</label></span>
+								 <span class="showinfosIfram" style="width:450px">3>&nbsp;[每日登陆领奖]<label style="color:red;">(&nbsp;收益提高6倍&nbsp;)</label></span>
+                                 <span class="showinfosIfram" style="margin-top:1px;width:80%;float:right;"><a href="changjianwenti/7.html" target="_blank" style="color:#428cc3; text-decoration:none;float:right;margin-right:13px;">了解更多特权>></a></span>
+                             </div>
+                         </div>
+                     </div>
+                     <div id="state7" style="display:none;display:none;_margin-left:3px;">
+                         <div class="frame1Con"  style="_margin-left:4px;">
+                             <p>再充值<span>70元</span>，即可享有</p>
+                             <div class="frame1ConTq">
+                                 <span class="showinfosIfram" style="font-weight:bold;">[<img src="templets/shopImg/showv7.gif" />]特权：</span>
+                                 <span class="showinfosIfram" style="width:450px">1>&nbsp;每<label style="color:#23a4da;">单笔</label>充值满<label style="color:#23a4da;">100元</label>，返利<label style="color:red;">15%</label></span>
+                                 <span class="showinfosIfram">2>&nbsp;每分钟获得<label style="color:red;">5点</label>等级经验<label style="color:red;">（&nbsp;升级速度提高400%&nbsp;）</label></span>
+								 <span class="showinfosIfram" style="width:450px">3>&nbsp;[每日登陆领奖]<label style="color:red;">(&nbsp;收益提高7倍&nbsp;)</label></span>
+                                 <span class="showinfosIfram" style="margin-top:1px;width:80%;float:right;"><a href="changjianwenti/7.html" target="_blank" style="color:#428cc3; text-decoration:none;float:right;margin-right:13px;">了解更多特权>></a></span>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+             <div class="main6footer" id="VIPNow">
+                 <input type="button" value="" style="margin-top:8px;" id="showshengji" />
+             </div>
+         </div>
+</body>
+</html>
+    <!--  VIP功能模块  end  -->
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //Vip页面不同等级时鼠标悬浮切换不同块的状态事件
+            var tab_li = $("#showmid6Info ul li");
+            tab_li.hover(function () {
+                $(this).addClass("selected").siblings().removeClass("selected");
+                var index = tab_li.index(this);
+                $("div.showAllDiv  > div").eq(index).show().siblings().hide();
+            });
+
+            $(".vipStep li").hover(function () {
+                $(this).animate({ "margin-top": "5px" }, 200);
+            }, function () {
+                $(this).animate({ "margin-top": "0" }, 200);
+            });
+            $("#closeVIP").click(function () {
+                $("#main_6").css("display", "none");
+            });
+            $("#vipHelp").click(function () {
+                $("#tiaozhuan").attr("href", "");
+            });
+			 $("#showshengji").bind("click", function () {
+				window.open("http://pay.6513.com/");
+               // window.location.href = "http://pay.6513.com/";
+            });
+        });
+    </script>
